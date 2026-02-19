@@ -48,3 +48,142 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* =========================================
+   PRINT STYLES
+   Optimized for A4, single-page fit where possible
+   ========================================= */
+@media print {
+  @page {
+    margin: 0;
+    size: auto;
+  }
+
+  /* --- 1. Base Reset & Layout --- */
+  body {
+    background: white;
+    color: black;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* Zoom 0.9 allows most standard resumes to fit on one page */
+    zoom: 0.9;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #root {
+    width: 100%;
+  }
+
+  #root>div {
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    height: 100%;
+  }
+
+  /* --- 2. Hiding UI Elements --- */
+  /* Hide navbar, buttons, hints, and fixed widgets */
+  .fixed,
+  [style*="position: fixed"],
+  [style*="position:fixed"],
+  body>*:not(#root),
+  /* Portals */
+  #root>div>div:first-child,
+  /* Toolbar */
+  .text-center.text-sm.text-resume-text-secondary
+
+  /* Footer hint */
+    {
+    display: none !important;
+  }
+
+  /* --- 3. Resume Card Layout --- */
+  .bg-resume-bg-card {
+    display: block !important;
+    min-height: 100vh;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+    /* 
+      "Faux Columns" Hack:
+      Use a linear gradient to simulate the sidebar background extending 
+      to the bottom of the page, regardless of content height.
+    */
+    background: linear-gradient(to right, #f4f4f4 30%, white 30%) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Flex container for side-by-side layout */
+  .bg-resume-bg-card>div {
+    display: flex !important;
+    flex-direction: row !important;
+    height: 100%;
+  }
+
+  /* Sidebar Column */
+  .bg-resume-bg-card>div>div:first-child {
+    width: 30% !important;
+    background: transparent !important;
+    /* Managed by parent gradient */
+    color: black !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    padding: 2rem !important;
+  }
+
+  /* Main Content Column */
+  .bg-resume-bg-card>div>div:last-child {
+    width: 70% !important;
+    padding: 2rem !important;
+  }
+
+  /* --- 4. Content Visibility & Typography --- */
+  /* Force dark text for readability */
+  p,
+  span,
+  div,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: black !important;
+    text-shadow: none !important;
+  }
+
+  [class*="text-resume-text-secondary"],
+  [class*="text-gray-"] {
+    color: #444 !important;
+  }
+
+  /* Ensure Photo Visibility */
+  .bg-resume-bg-card>div>div:first-child>div:first-child {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100% !important;
+  }
+
+  /* Force "Closed" Accordions to be visible if they rely on height/overflow */
+  /* Note: For this specific template, we want the default view (collapsed), 
+     so we don't force expansion, but we ensure visible elements aren't accidentally hidden. */
+  [class*="overflow-hidden"],
+  [style*="height: 0"],
+  [style*="height:0"] {
+    /* Only applied if we needed to force expand. Kept here for safety on other hidden elements. */
+    height: auto !important;
+    display: block !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    visibility: visible !important;
+  }
+}
