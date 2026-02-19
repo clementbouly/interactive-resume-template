@@ -39,13 +39,21 @@ function SidebarPhoto({ photo, name, emoji }: { photo?: string; name: string; em
 
   return (
     <div className="flex justify-center mb-6" style={{ perspective: '300px' }}>
+      {/* Print-only static photo */}
+      <img
+        src={photo}
+        alt={`Profile photo of ${name}`}
+        className="hidden print:block w-32 h-32 rounded-full border-4 border-gray-200 object-cover"
+      />
+
+      {/* Screen-only interactive photo */}
       <motion.div
         onClick={handleFlip}
         onKeyDown={handleKeyDown}
         onAnimationComplete={() => setIsSpinning(false)}
         animate={{ rotateY: isSpinning ? 360 : 0 }}
         transition={{ duration: PHOTO_ANIMATION_DURATION, ease: 'easeInOut' }}
-        className="relative w-32 h-32 cursor-pointer"
+        className="relative w-32 h-32 cursor-pointer print:hidden"
         style={{ transformStyle: 'preserve-3d' }}
         role="button"
         tabIndex={0}
